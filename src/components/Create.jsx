@@ -1,10 +1,14 @@
 import { nanoid } from "nanoid";
-import React, { useContext, useState } from "react";
-import {Recepicontext} from "../contexts/RecepiContext";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { asyncgetrecipies } from "../store/action/recipeAction";
 
 const Create = () => {
-    const [recipes, setrecipes] = useContext(Recepicontext);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { recipes } = useSelector((state) => state.recipeReducer);
 
     const [image, setimage] = useState("");
     const [title, settitle] = useState("");
@@ -22,14 +26,14 @@ const Create = () => {
             ingredients,
             instructions,
         };
-        setrecipes([...recipes, newRecipe]);
 
-        // sets the data in the localStorge of the browser
         localStorage.setItem(
             "recipes",
             JSON.stringify([...recipes, newRecipe])
         );
+        dispatch(asyncgetrecipies());
         toast.success("Recipe Created Successfully!");
+        navigate("/recipes");
     };
     return (
         <form onSubmit={SubmitHandler} className="w-[70%] m-auto  pb-5">

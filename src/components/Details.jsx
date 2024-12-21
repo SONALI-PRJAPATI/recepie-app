@@ -1,26 +1,27 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useContext } from "react";
 import { toast } from "react-toastify";
-import {Recepicontext} from "../contexts/RecepiContext";
+import { useDispatch, useSelector } from "react-redux";
+import { asyncgetrecipies } from "../store/action/recipeAction";
+
 const Details = () => {
-     
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const params = useParams();
-    const [recipes, setrecipes] = useContext(Recepicontext);
+    const { recipes } = useSelector((state) => state.recipeReducer);
     const recipe = recipes.find((r) => r.id == params.id);
 
-
-    const DeleteHandler=() =>{
-        setrecipes(recipes.filter((r) => r.id != params.id));
+    const DeleteHandler = () => {
         localStorage.setItem(
             "recipes",
             JSON.stringify(recipes.filter((r) => r.id != params.id))
         );
+        dispatch(asyncgetrecipies());
         toast.success("Recipe Deleted Successfully!");
-        navigate("/recipes");
-    }
 
-    
+        navigate("/recipes");
+    };
+
     return recipe ? (
         <div className="w-[80%] m-auto p-5">
             <Link to="/recipes" className="text-3xl ri-arrow-left-line"></Link>

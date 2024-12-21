@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
 import Card from "./Card";
 import { Link, useLocation } from "react-router-dom";
-import {Recepicontext} from "../contexts/RecepiContext";
+import { useSelector } from "react-redux";
 const Recipes = () => {
-    const [recipes, setrecipes] = useContext(Recepicontext);
+    const { recipes } = useSelector((state) => state.recipeReducer);
     const { pathname } = useLocation();
-    console.log(recipes);
+
     return (
         <div className=" ">
             <h1 className="text-center text-2xl font-semibold">OUR RECIPES</h1>
